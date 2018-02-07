@@ -141,6 +141,15 @@ module.exports = function($) {
 
         /*reshuffles some elements of these things for defined wrappers*/
         function organizeWrapper(data, dataOptions, globalOptions) {
+          if (data.length>0) {
+            if (typeof(data[0].data)!=="undefined") {
+              return {
+                data: data,
+                dataOptions: dataOptions,
+                globalOptions: globalOptions
+              };
+            }
+          }
             if (typeof(data.wrapperType) !== "undefined") {
                 if (data.wrapperType === "categories") {
                     if (typeof(globalOptions.xaxis)==="undefined") {
