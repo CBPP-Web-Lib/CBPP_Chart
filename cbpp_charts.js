@@ -487,10 +487,12 @@ module.exports = function($) {
                     itemClass = "legendBox";
                 }
                 for (var i = 0, ii = data.length; i<ii; i++) {
-                    li = $("<li>");
-                    li.append($("<div class='" + itemClass + "' style='background-color:" + data[i].color + "' ></div>"));
-                    li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
-                    ul.append(li);
+                    if (!(data[i].hideFromLegend===true)) {
+                      li = $("<li>");
+                      li.append($("<div class='" + itemClass + "' style='background-color:" + data[i].color + "' ></div>"));
+                      li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
+                      ul.append(li);
+                    }
                 }
                 legend.append(ul);
                 if (typeof(globalOptions.cbpp_legend.outsideLocation)!=="undefined") {
