@@ -371,7 +371,8 @@ module.exports = function($) {
                     align = "left" /*default annotation alignment*/,
                     lineClass,
                     pointClass,
-                    offset = 0,
+                    parOffset = 0,
+                    perpOffset = 0,
                     direction = "top",
                     length = 35,
                     opposites = {
@@ -420,13 +421,16 @@ module.exports = function($) {
                     if (typeof(annotations[i].direction) !== "undefined") {
                       direction = annotations[i].direction;
                     }
-                    if (typeof(annotations[i].offset) !== "undefined") {
-                      offset = annotations[i].offset;
+                    if (typeof(annotations[i].parOffset) !== "undefined") {
+                      parOffset = annotations[i].parOffset;
+                    }
+                    if (typeof(annotations[i].perpOffset) !== "undefined") {
+                      perpOffset = annotations[i].perpOffset;
                     }
                     if (typeof(annotations[i].length) !== "undefined") {
                       length = annotations[i].length;
                     }
-                    offset = (length + offset) + "px";
+                    parOffset = (length + parOffset) + "px";
                     wEl.find(".line").css(opposites[direction],"auto")
                       .css(direction,"0px")
                       .css(perpDim[direction],"2px")
@@ -434,7 +438,7 @@ module.exports = function($) {
                     if (direction==="left"||direction==="right") {
                       wEl.find(".line").css("top","1.5px")
                     }
-                    aDOM.css(direction, offset);
+                    aDOM.css(direction, parOffset);
                     aDOM.css("text-align",align);
                     /*if (direction === "up") {
                         aDOM.css("bottom",vOffset);
@@ -455,16 +459,17 @@ module.exports = function($) {
                     if (direction==="top" || direction==="bottom") {
                       size = aDOM.width();
                       aDOM.css("left", {
-                        "left":0,
-                        "middle":0-size/2,
-                        "right":0-size
+                        "left":0 + perpOffset,
+                        "middle":0-size/2 + perpOffset,
+                        "right":0-size + perpOffset
                       }[align] + "px");
                     } else {
                       size = aDOM.height();
+                      console.log(perpOffset);
                       aDOM.css("top", {
-                        "top":1.5,
-                        "middle":1.5-size/2,
-                        "bottom":1.5-size
+                        "top":1.5 + perpOffset,
+                        "middle":1.5-size/2 + perpOffset,
+                        "bottom":1.5 -size + perpOffset
                       }[align] + "px");
                     }
                 }

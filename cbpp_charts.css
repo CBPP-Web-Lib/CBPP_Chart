@@ -44,10 +44,10 @@ div.cbppInteractiveChart  .tooltip {
     z-index:110;
 }
 
-div.cbppInteractiveChart div.aWrap div.vLine {
-    width:2px !important;
+div.cbppInteractiveChart div.aWrap div.line {
+  /* width:2px !important;*/
     background-color:#000;
-    height:35px;
+  /*  height:35px;*/
     position:absolute;
     bottom:0px;
     left:0px;
