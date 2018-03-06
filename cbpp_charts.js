@@ -365,16 +365,36 @@ module.exports = function($) {
         var options;
         function makeChart() {
             function addAnnotations() {
-                var offset, /*point offset*/
+                var pointOffset, /*point offset*/
                     aDOM, /*dom element for annotation*/
                     wEl, /*wrapper around annotation element*/
                     align = "left" /*default annotation alignment*/,
                     lineClass,
                     pointClass,
-                    vOffset,
-                    direction;
+                    offset = 0,
+                    direction = "top",
+                    length = 35,
+                    opposites = {
+                      "top":"bottom",
+                      "left":"right",
+                      "right":"left",
+                      "bottom":"top"
+                    },
+                    perpDim = {
+                      "top":"width",
+                      "bottom":"width",
+                      "left":"height",
+                      "right":"height"
+                    },
+                    parDim = {
+                      "top":"height",
+                      "bottom":"height",
+                      "left":"width",
+                      "right":"width"
+                    },
+                    size;
                 for (var i = 0, ii = annotations.length; i < ii; i++) {
-                    offset = c.plot.pointOffset({x: annotations[i].x, y: annotations[i].y});
+                    pointOffset = c.plot.pointOffset({x: annotations[i].x, y: annotations[i].y});
                     lineClass = '';
                     pointClass = '';
                     if (annotations[i].showLine !== "undefined") {
@@ -387,34 +407,42 @@ module.exports = function($) {
                             pointClass = " hide";
                         }
                     }
-                    wEl = $("<div class='aWrap'><div class='vLine" + lineClass + "'></div><div class='circle" + pointClass + "'></div></div>");
+                    wEl = $("<div class='aWrap'><div class='line" + lineClass + "'></div><div class='circle" + pointClass + "'></div></div>");
                     aDOM = $("<div>");
                     aDOM.html(annotations[i].content);
                     wEl.css("position","absolute");
-                    wEl.css("left",offset.left);
-                    wEl.css("top",offset.top);
+                    wEl.css("left",pointOffset.left);
+                    wEl.css("top",pointOffset.top);
                     aDOM.css("position","absolute");
                     if (typeof(annotations[i].align) !== "undefined") {
-                        align = annotations[i].align;
+                      align = annotations[i].align;
                     }
-                    direction = "up";
                     if (typeof(annotations[i].direction) !== "undefined") {
-                        direction = "down";
+                      direction = annotations[i].direction;
                     }
-                    vOffset = 30;
-                    if (typeof(annotations[i].vOffset) !== "undefined") {
-                        vOffset = annotations[i].vOffset;
+                    if (typeof(annotations[i].offset) !== "undefined") {
+                      offset = annotations[i].offset;
                     }
-                    vOffset = vOffset + "px";
-
-                    aDOM.css(align,"-15px");
-                    if (direction === "up") {
+                    if (typeof(annotations[i].length) !== "undefined") {
+                      length = annotations[i].length;
+                    }
+                    offset = (length + offset) + "px";
+                    wEl.find(".line").css(opposites[direction],"auto")
+                      .css(direction,"0px")
+                      .css(perpDim[direction],"2px")
+                      .css(parDim[direction], length + "px");
+                    if (direction==="left"||direction==="right") {
+                      wEl.find(".line").css("top","1.5px")
+                    }
+                    aDOM.css(direction, offset);
+                    aDOM.css("text-align",align);
+                    /*if (direction === "up") {
                         aDOM.css("bottom",vOffset);
                     } else {
                         wEl.find(".vLine").css("bottom","auto");
                         wEl.find(".vLine").css("top","0px");
                         aDOM.css("top",vOffset);
-                    }
+                    }*/
                     aDOM.css("width",annotations[i].width);
                     aDOM.addClass("annotation");
                     if (typeof(annotations[i].whiteBackground)!=="undefined") {
@@ -424,6 +452,21 @@ module.exports = function($) {
                     }
                     wEl.append(aDOM);
                     c.placeholder.append(wEl);
+                    if (direction==="top" || direction==="bottom") {
+                      size = aDOM.width();
+                      aDOM.css("left", {
+                        "left":0,
+                        "middle":0-size/2,
+                        "right":0-size
+                      }[align] + "px");
+                    } else {
+                      size = aDOM.height();
+                      aDOM.css("top", {
+                        "top":1.5,
+                        "middle":1.5-size/2,
+                        "bottom":1.5-size
+                      }[align] + "px");
+                    }
                 }
             }
 
