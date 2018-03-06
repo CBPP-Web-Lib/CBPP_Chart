@@ -465,7 +465,6 @@ module.exports = function($) {
                       }[align] + "px");
                     } else {
                       size = aDOM.height();
-                      console.log(perpOffset);
                       aDOM.css("top", {
                         "top":1.5 + perpOffset,
                         "middle":1.5-size/2 + perpOffset,
@@ -652,6 +651,13 @@ module.exports = function($) {
                 if (typeof(globalOptions.cbpp_xaxis_majorTicks)==="number") {
                     rounding = globalOptions.cbpp_xaxis_majorTicks;
                 }
+                var majorTickSize = 0.04, minorTickSize = 0.02;
+                if (typeof(globalOptions.cbpp_xaxis_majorTickSize)!=="undefined") {
+                  majorTickSize = globalOptions.cbpp_xaxis_majorTickSize;
+                }
+                if (typeof(globalOptions.cbpp_xaxis_minorTickSize)!=="undefined") {
+                  minorTickSize = globalOptions.cbpp_xaxis_minorTickSize;
+                }
                 var xMin = Math.round(c.bounds.x.min/rounding)*rounding;
                 var xMax = Math.round(c.bounds.x.max/rounding)*rounding;
                 var x;
@@ -667,16 +673,16 @@ module.exports = function($) {
                 }
                 if (typeof(globalOptions.cbpp_xaxis_majorTicks)!=="undefined") {
                     if (isArray(globalOptions.cbpp_xaxis_majorTicks)) {
-                        fromArray(globalOptions.cbpp_xaxis_majorTicks, 0.04);
+                        fromArray(globalOptions.cbpp_xaxis_majorTicks, majorTickSize);
                     } else {
-                        fromInterval(globalOptions.cbpp_xaxis_majorTicks,0.04);
+                        fromInterval(globalOptions.cbpp_xaxis_majorTicks,majorTickSize);
                     }
                 }
                 if (typeof(globalOptions.cbpp_xaxis_minorTicks)!=="undefined") {
                     if (isArray(globalOptions.cbpp_xaxis_minorTicks)) {
-                        fromArray(globalOptions.cbpp_xaxis_minorTicks, 0.02);
+                        fromArray(globalOptions.cbpp_xaxis_minorTicks, minorTickSize);
                     } else {
-                        fromInterval(globalOptions.cbpp_xaxis_minorTicks,0.02);
+                        fromInterval(globalOptions.cbpp_xaxis_minorTicks,minorTickSize);
                     }
                 }
             }
