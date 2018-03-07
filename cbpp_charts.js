@@ -475,6 +475,7 @@ module.exports = function($) {
             }
 
             function addLegend() {
+                var printCanvas;
                 var data = c.plot.getData();
                 if (typeof(c.legend)!=="undefined") {
                     c.legend.remove();
@@ -489,9 +490,20 @@ module.exports = function($) {
                 for (var i = 0, ii = data.length; i<ii; i++) {
                     if (!(data[i].hideFromLegend===true)) {
                       li = $("<li>");
-                      li.append($("<div class='" + itemClass + "' style='background-color:" + data[i].color + "' ></div>"));
+                      var item = $("<div class='" + itemClass + "' style='background-color:" + data[i].color + "' ></div>");
+                      li.append(item);
                       li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
                       ul.append(li);
+                      try {
+                        printCanvas = $(document.createElement("canvas"))
+                          .attr({"width":100,"height":100})
+                          .css({"width":"100%","height":"100%"});
+                        printCanvas[0].getContext("2d").fillStyle = data[i].color;
+                        printCanvas[0].getContext("2d").fillRect(0,0,100,100);
+                        item.append(printCanvas);
+                      } catch (ex) {
+                        console.log("couldn't setup fallback print");
+                      }
                     }
                 }
                 legend.append(ul);

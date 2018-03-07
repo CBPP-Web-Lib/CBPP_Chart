@@ -111,6 +111,14 @@ div.cbppChartLegend ul li div.legendLine {
     display:inline-block;
 }
 
+div.cbppChartLegend ul li canvas {
+  position:absolute;
+  top:0px;
+  left:0px;
+  width:100% !important;
+  height:100% !important;
+}
+
 div.cbppChartLegend ul li div.legendBox {
     height:20px;
     width:20px;
