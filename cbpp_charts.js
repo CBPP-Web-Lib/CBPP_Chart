@@ -108,8 +108,13 @@ module.exports = function($) {
     /*end utility functions*/
 
     /*chart constructor*/
-    CBPP_Charts.Chart = function(div_selector, data, dataOptions, globalOptions, uAnnotations) {
-
+    CBPP_Charts.Chart = function(selector_or_$div, data, dataOptions, globalOptions, uAnnotations) {
+        var chart_wrap_div;
+        if (typeof(selector_or_$div)==="string") {
+          chart_wrap_div = $(selector_or_$div);
+        } else {
+          chart_wrap_div = selector_or_$div;
+        }
 
         /*defaults*/
         if (typeof(data)==="undefined") {
@@ -207,7 +212,7 @@ module.exports = function($) {
         }
         function destroy() {
             $(window).off("resize", null, resizeFunction);
-            $(div_selector).empty();
+            chart_wrap_div.empty();
         }
         var resizeActions = {};
         function resizeFunction() {
@@ -570,9 +575,9 @@ module.exports = function($) {
             setupResize();
 
             draw = function() {
-                $(div_selector).addClass("cbppInteractiveChart");
-                c.placeholder = $(div_selector);
-                c.plot = $.plot(div_selector, data, options);
+                chart_wrap_div.addClass("cbppInteractiveChart");
+                c.placeholder = chart_wrap_div;
+                c.plot = $.plot(chart_wrap_div, data, options);
                 if (typeof(options.cbpp_tooltipMaker) === "function") {
                     c.placeholder.unbind("plothover");
                     c.placeholder.bind("plothover", hover);
