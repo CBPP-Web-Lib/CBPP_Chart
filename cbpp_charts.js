@@ -212,6 +212,8 @@ module.exports = function($) {
         }
         function destroy() {
             $(window).off("resize", null, resizeFunction);
+            chart_wrap_div.off();
+            chart_wrap_div.find("*").off();
             chart_wrap_div.empty();
         }
         var resizeActions = {};
