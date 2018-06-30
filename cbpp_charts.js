@@ -13,7 +13,7 @@ module.exports = function($) {
     var CBPP_Charts = {};
     CBPP_Charts.ready = false;
 
-    require("./node_modules/jquery-flot/jquery.flot_commonJS.js")($);
+    require("./jquery.flot_commonJS.js")($);
     require("./cbpp_charts.css");
 
     CBPP_Charts.utilities = {
