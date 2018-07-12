@@ -650,7 +650,13 @@ module.exports = function($) {
             }
             function setupGridMarkings() {
                 c.markingsStorage = [];
-                function makeMarking(x, percentHeight) {
+                function makeMarking(x, percentHeight, atZero) {
+                    var yfrom = c.bounds.y.min;
+                    var yto = percentHeight * (c.bounds.y.max - c.bounds.y.min) + c.bounds.y.min;
+                    if (atZero===true) {
+                        yfrom = 0;
+                        yto = percentHeight*(c.bounds.y.max - c.bounds.y.min);
+                    }
                     return {
                         color : "#666",
                         lineWidth: 2,
@@ -659,8 +665,8 @@ module.exports = function($) {
                             to: x
                         },
                         yaxis: {
-                            from: c.bounds.y.min,
-                            to: percentHeight * (c.bounds.y.max - c.bounds.y.min) + c.bounds.y.min
+                            from: yfrom,
+                            to: yto
                         }
                     };
                 }
@@ -679,17 +685,21 @@ module.exports = function($) {
                 if (typeof(globalOptions.cbpp_xaxis_minorTickSize)!=="undefined") {
                   minorTickSize = globalOptions.cbpp_xaxis_minorTickSize;
                 }
+                var atZero = false;
+                if (typeof(globalOptions.cbpp_xaxis_ticksAtZero)!=="undefined") {
+                  atZero = globalOptions.cbpp_xaxis_ticksAtZero;
+                }
                 var xMin = Math.round(c.bounds.x.min/rounding)*rounding;
                 var xMax = Math.round(c.bounds.x.max/rounding)*rounding;
                 var x;
                 function fromInterval(ticks, size) {
                     for (x = xMin + majorOffset; x<=xMax;x+=ticks) {
-                        c.markingsStorage.push(makeMarking(x,size));
+                        c.markingsStorage.push(makeMarking(x,size,atZero));
                     }
                 }
                 function fromArray(ticks, size) {
                     for (var i = 0, ii = ticks.length; i<ii; i++) {
-                        c.markingsStorage.push(makeMarking(ticks[i], size));
+                        c.markingsStorage.push(makeMarking(ticks[i], size,atZero));
                     }
                 }
                 if (typeof(globalOptions.cbpp_xaxis_majorTicks)!=="undefined") {
