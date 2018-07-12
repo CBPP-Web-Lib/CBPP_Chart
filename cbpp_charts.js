@@ -497,7 +497,11 @@ module.exports = function($) {
                 for (var i = 0, ii = data.length; i<ii; i++) {
                     if (!(data[i].hideFromLegend===true)) {
                       li = $("<li>");
-                      var item = $("<div class='" + itemClass + "' style='background-color:" + data[i].color + "' ></div>");
+                      var thisItemClass = itemClass;
+                      if (typeof(data[i].legendType)!=="undefined") {
+                          thisItemClass = data[i].legendType === "box" ? "legendBox" : "legendLine";
+                      }
+                      var item = $("<div class='" + thisItemClass + "' style='background-color:" + data[i].color + "' ></div>");
                       li.append(item);
                       li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
                       ul.append(li);
