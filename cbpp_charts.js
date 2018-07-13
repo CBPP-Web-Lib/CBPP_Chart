@@ -537,7 +537,7 @@ module.exports = function($) {
                     width = c.plot.p2c({x:right,y:y}).left - origin.left;
 
                 zeroLine.css("cssText","width:"+Math.round(width + 2) + "px !important");
-                zeroLine.css("top", Math.round(origin.top + offset.top - 1) + "px");
+                zeroLine.css("top", Math.floor(origin.top + offset.top - 1) + "px");
                 zeroLine.css("left", Math.round(origin.left + offset.left - 1) + "px");
                 c.placeholder.append(zeroLine);
 
