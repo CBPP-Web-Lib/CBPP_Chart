@@ -501,7 +501,14 @@ module.exports = function($) {
                       if (typeof(data[i].legendType)!=="undefined") {
                           thisItemClass = data[i].legendType === "box" ? "legendBox" : "legendLine";
                       }
+                      var dashes = false;
+                      if (typeof(data[i].dashes)!=="undefined") {
+                        if (data[i].dashes.show===true) {
+                            dashes = true;
+                        }
+                      }
                       var item = $("<div class='" + thisItemClass + "' style='background-color:" + data[i].color + "' ></div>");
+                      
                       li.append(item);
                       li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
                       ul.append(li);
@@ -515,6 +522,13 @@ module.exports = function($) {
                       } catch (ex) {
                         console.log("couldn't setup fallback print");
                       }
+                      if (dashes) {
+                        for (var k = 0; k<5;k++) {
+                            var dashgap = $(document.createElement("div")).attr("class","dashgap");
+                            item.append(dashgap);
+                            dashgap.css("left",((k+0.5)*100/5) + "%");
+                        }
+                    }
                     }
                 }
                 legend.append(ul);
