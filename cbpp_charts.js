@@ -711,7 +711,10 @@ module.exports = function($) {
                 var xMax = Math.round(c.bounds.x.max/rounding)*rounding;
                 var x;
                 function fromInterval(ticks, size) {
-                    for (x = xMin + majorOffset; x<=xMax;x+=ticks) {
+                    for (x = xMin + majorOffset; x<=c.bounds.x.max;x+=ticks) {
+                        c.markingsStorage.push(makeMarking(x,size,atZero));
+                    }
+                    for (x = xMin + majorOffset - ticks; x>=c.bounds.x.min;x-=ticks) {
                         c.markingsStorage.push(makeMarking(x,size,atZero));
                     }
                 }
