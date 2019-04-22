@@ -484,61 +484,91 @@ module.exports = function($) {
             function addLegend() {
                 var printCanvas;
                 var data = c.plot.getData();
+                var k, kk;
                 if (typeof(c.legend)!=="undefined") {
-                    c.legend.remove();
-                }
-                var legend = c.legend = $("<div class='cbppChartLegend'></div>"),
-                    ul = $("<ul>"),
-                    li,
-                    itemClass = "legendLine";
-                if (globalOptions.cbpp_legend.type === "box") {
-                    itemClass = "legendBox";
-                }
-                for (var i = 0, ii = data.length; i<ii; i++) {
-                    if (!(data[i].hideFromLegend===true)) {
-                      li = $("<li>");
-                      var thisItemClass = itemClass;
-                      if (typeof(data[i].legendType)!=="undefined") {
-                          thisItemClass = data[i].legendType === "box" ? "legendBox" : "legendLine";
-                      }
-                      var dashes = false;
-                      if (typeof(data[i].dashes)!=="undefined") {
-                        if (data[i].dashes.show===true) {
-                            dashes = true;
-                        }
-                      }
-                      var item = $("<div class='" + thisItemClass + "' style='background-color:" + data[i].color + "' ></div>");
-                      
-                      li.append(item);
-                      li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
-                      ul.append(li);
-                      try {
-                        printCanvas = $(document.createElement("canvas"))
-                          .attr({"width":100,"height":100})
-                          .css({"width":"100%","height":"100%"});
-                        printCanvas[0].getContext("2d").fillStyle = data[i].color;
-                        printCanvas[0].getContext("2d").fillRect(0,0,100,100);
-                        item.append(printCanvas);
-                      } catch (ex) {
-                        console.log("couldn't setup fallback print");
-                      }
-                      if (dashes) {
-                        for (var k = 0; k<5;k++) {
-                            var dashgap = $(document.createElement("div")).attr("class","dashgap");
-                            item.append(dashgap);
-                            dashgap.css("left",((k+0.5)*100/5) + "%");
+                    for (k = 0, kk = c.legend.length; k<kk; k++) {
+                        c.legend[k].remove();
+                    }
+                } 
+                c.legend = [];
+                var legendInfo = [globalOptions.cbpp_legend];
+                if (typeof(globalOptions.cbpp_legend.split)!=="undefined") {
+                    legendInfo = globalOptions.cbpp_legend.split;
+                    for (k = 0, kk = legendInfo.length; k<kk; k++) {
+                        for (var option in globalOptions.cbpp_legend) {
+                            if (globalOptions.cbpp_legend.hasOwnProperty(option)) {
+                                if (option!=="split") {
+                                    legendInfo[k][option] = globalOptions.cbpp_legend[option];
+                                }
+                            }
                         }
                     }
-                    }
                 }
-                legend.append(ul);
-                if (typeof(globalOptions.cbpp_legend.outsideLocation)!=="undefined") {
-                    legend.css("position","relative");
-                    $(globalOptions.cbpp_legend.outsideLocation).append(legend);
-                } else {
-                    legend.css("top",globalOptions.cbpp_legend.top + "%");
-                    legend.css("left", globalOptions.cbpp_legend.left + "%");
-                    c.placeholder.append(legend);
+                for (k = 0, kk = legendInfo.length; k<kk; k++) {
+                    var legend = c.legend[k] = $("<div class='cbppChartLegend' data-legendSplitIndex='" + k + "'></div>"),
+                        ul = $("<ul>"),
+                        li,
+                        itemClass = "legendLine";
+                    if (legendInfo[k].type === "box") {
+                        itemClass = "legendBox";
+                    }
+                    for (var i = 0, ii = data.length; i<ii; i++) {
+                        var useSeries = true;
+                        if (typeof(legendInfo[k].series)!=="undefined") {
+                            useSeries = false;
+                            for (var j = 0, jj = legendInfo[k].series.length; j<jj; j++) {
+                                if (i === legendInfo[k].series[j]) {
+                                    useSeries = true;
+                                }
+                            }
+                        }
+                        if (useSeries) {
+                            if (!(data[i].hideFromLegend===true)) {
+                                li = $("<li>");
+                                var thisItemClass = itemClass;
+                                if (typeof(data[i].legendType)!=="undefined") {
+                                    thisItemClass = data[i].legendType === "box" ? "legendBox" : "legendLine";
+                                }
+                                var dashes = false;
+                                if (typeof(data[i].dashes)!=="undefined") {
+                                    if (data[i].dashes.show===true) {
+                                        dashes = true;
+                                    }
+                                }
+                                var item = $("<div class='" + thisItemClass + "' style='background-color:" + data[i].color + "' ></div>");
+                                
+                                li.append(item);
+                                li.append($("<div class='legendLabel'>" + data[i].label + "</div>"));
+                                ul.append(li);
+                                try {
+                                    printCanvas = $(document.createElement("canvas"))
+                                    .attr({"width":100,"height":100})
+                                    .css({"width":"100%","height":"100%"});
+                                    printCanvas[0].getContext("2d").fillStyle = data[i].color;
+                                    printCanvas[0].getContext("2d").fillRect(0,0,100,100);
+                                    item.append(printCanvas);
+                                } catch (ex) {
+                                    console.log("couldn't setup fallback print");
+                                }
+                                if (dashes) {
+                                    for (var l = 0; l<5;l++) {
+                                        var dashgap = $(document.createElement("div")).attr("class","dashgap");
+                                        item.append(dashgap);
+                                        dashgap.css("left",((l+0.5)*100/5) + "%");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    legend.append(ul);
+                    if (typeof(legendInfo[k].outsideLocation)!=="undefined") {
+                        legend.css("position","relative");
+                        $(legendInfo[k].outsideLocation).append(legend);
+                    } else {
+                        legend.css("top",legendInfo[k].top + "%");
+                        legend.css("left", legendInfo[k].left + "%");
+                        c.placeholder.append(legend);
+                    }
                 }
             }
             function add0Axis(y) {
