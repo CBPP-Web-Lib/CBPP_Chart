@@ -492,6 +492,7 @@ module.exports = function($) {
                 } 
                 c.legend = [];
                 var legendInfo = [globalOptions.cbpp_legend];
+                var legendOrder = globalOptions.cbpp_legendOrder;
                 if (typeof(globalOptions.cbpp_legend.split)!=="undefined") {
                     legendInfo = globalOptions.cbpp_legend.split;
                     for (k = 0, kk = legendInfo.length; k<kk; k++) {
@@ -512,7 +513,13 @@ module.exports = function($) {
                     if (legendInfo[k].type === "box") {
                         itemClass = "legendBox";
                     }
-                    for (var i = 0, ii = data.length; i<ii; i++) {
+                    var i;
+                    for (var q = 0, qq = data.length; q<qq; q++) {
+                        if (legendOrder) {
+                            i = legendOrder[q];
+                        } else {
+                            i = q;
+                        }
                         var useSeries = true;
                         if (typeof(legendInfo[k].series)!=="undefined") {
                             useSeries = false;
