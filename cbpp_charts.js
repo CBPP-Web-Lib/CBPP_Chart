@@ -381,6 +381,7 @@ module.exports = function($) {
                     parOffset = 0,
                     perpOffset = 0,
                     direction = "top",
+                    opacity = 1,
                     length = 35,
                     opposites = {
                       "top":"bottom",
@@ -437,6 +438,10 @@ module.exports = function($) {
                     if (typeof(annotations[i].length) !== "undefined") {
                       length = annotations[i].length;
                     }
+                    if (typeof(annotations[i].opacity) !== "undefined") {
+                      opacity = annotations[i].opacity;
+                    }
+                    wEl.css("opacity", opacity);
                     parOffset = (length + parOffset) + "px";
                     wEl.find(".line").css(opposites[direction],"auto")
                       .css(direction,"0px")
