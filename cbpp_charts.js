@@ -617,7 +617,12 @@ module.exports = function($) {
                                         x = xy.x;
                                         y = xy.y;
                                     }
-                                    o = c.plot.pointOffset({x:x + globalOptions.bars.barWidth/2, y:y});
+                                    if (globalOptions.bars.horizontal) {
+                                        y += globalOptions.bars.barWidth/2;
+                                    } else {
+                                        x += globalOptions.bars.barWidth/2;
+                                    }
+                                    o = c.plot.pointOffset({x:x, y:y});
                                     wrapper = $("<div class='labelWrapper' style='left:" + o.left + "px;top:" + o.top + "px'></div>");
                                     label = $("<div class='label'>" + globalOptions.bars.labels.formatter(data[i],j) + "</div>");
                                     wrapper.append(label);
