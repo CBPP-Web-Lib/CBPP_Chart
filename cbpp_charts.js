@@ -617,6 +617,11 @@ module.exports = function($) {
                                         x = xy.x;
                                         y = xy.y;
                                     }
+                                    if (typeof(globalOptions.bars.labels.xyOffset)==="function") {
+                                        var _xy = globalOptions.bars.labels.xyOffset(x, y);
+                                        x = _xy.x;
+                                        y = _xy.y;
+                                    }
                                     if (globalOptions.bars.horizontal) {
                                         y += globalOptions.bars.barWidth/2;
                                     } else {
